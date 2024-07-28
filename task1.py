@@ -19,10 +19,16 @@ def read_recipes_to_dict(file):
             dict[dish] = []
             #узнаём, сколько у блюда ингредиентов, добавляем их в словарь
             ingredient_amount = int(file.readline().strip())
+            set_ingredients = set() #множество ингредиентов этого блюда
             for i in range(ingredient_amount):
-                s_ingr = file.readline().strip()
-                # TODO----------------------пока просто сохраняю строку по ключу-------------------------
-                dict[dish].append(s_ingr)
+                #выделяем из строки данные - название, кол-во и ед. измерения 
+                l_ingr = (file.readline().strip()).split(' | ')
+                #если ингредиент не дублируется в описании этого блюда
+                if l_ingr[0] not in set_ingredients:
+                    d_ingr = {'ingredient_name':l_ingr[0], 'quantity':l_ingr[1],
+                              'measure':l_ingr[2]}
+                    dict[dish].append(d_ingr)
+                    set_ingredients.add(l_ingr[0])
         #если блюдо уже есть, то не сохраняем новых данных
         else:
             ingredient_amount = int(file.readline().strip())
